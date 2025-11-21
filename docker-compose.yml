@@ -1,0 +1,43 @@
+services:
+  iot-cassandra:
+    image: cassandra:5.0.6
+    container_name: iot_cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=iot_cassandra_cluster
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    networks:
+      - iot-network
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  iot-app:
+    image: golang:1.25.3-alpine
+    container_name: iot_app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - iot-cassandra
+    environment:
+      - CASSANDRA_CONTACT_POINTS=iot-cassandra
+      - CASSANDRA_LOCAL_DC=datacenter1
+    volumes:
+      - .:/app
+    command: go run main.go
+    networks:
+      - iot-network
+
+volumes:
+  cassandra-data:
+
+networks:
+  iot-network:
+    driver: bridge
