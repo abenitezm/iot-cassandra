@@ -1,22 +1,79 @@
 services:
-  iot-cassandra:
+  iot-cassandra-1:
     image: cassandra:5.0.6
-    container_name: iot_cassandra
+    container_name: iot_cassandra_1
     ports:
-      - "9042:9042"
-    environment:
-      - CASSANDRA_CLUSTER_NAME=iot_cassandra_cluster
-      - MAX_HEAP_SIZE=512M
-      - HEAP_NEWSIZE=100M
-    volumes:
-      - cassandra-data:/var/lib/cassandra
+      - 9042:9042
     networks:
       - iot-network
+    environment:
+      - CASSANDRA_CLUSTER_NAME=iot_cassandra_cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=datacenter1
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    volumes:
+      - cassandra-node-1:/var/lib/cassandra:rw
+    restart:
+      always
     healthcheck:
-      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
-      interval: 30s
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 15s
       timeout: 10s
-      retries: 3
+      retries: 10
+      start_period: 30s
+
+  iot-cassandra-2:
+    image: cassandra:5.0.6
+    container_name: iot_cassandra_2
+    ports:
+      - 9043:9042
+    networks:
+      - iot-network
+    environment:
+      - CASSANDRA_CLUSTER_NAME=iot_cassandra_cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_SEEDS=iot-cassandra-1
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    depends_on:
+      iot-cassandra-1:
+        condition: service_healthy
+    volumes:
+      - cassandra-node-2:/var/lib/cassandra:rw
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 45s
+
+  iot-cassandra-3:
+    image: cassandra:5.0.6
+    container_name: iot_cassandra_3
+    ports:
+      - 9044:9042
+    networks:
+      - iot-network
+    environment:
+      - CASSANDRA_CLUSTER_NAME=iot_cassandra_cluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_SEEDS=iot-cassandra-1
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+    depends_on:
+      iot-cassandra-2:
+        condition: service_healthy
+    volumes:
+      - cassandra-node-3:/var/lib/cassandra:rw
+    healthcheck:
+      test: ["CMD", "cqlsh", "-u", "cassandra", "-p", "cassandra", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
 
   iot-app:
     image: golang:1.25.3-alpine
@@ -25,9 +82,14 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - iot-cassandra
+      iot-cassandra-1:
+        condition: service_healthy
+      iot-cassandra-2:
+        condition: service_healthy
+      iot-cassandra-3:
+        condition: service_healthy
     environment:
-      - CASSANDRA_CONTACT_POINTS=iot-cassandra
+      - CASSANDRA_CONTACT_POINTS=iot-cassandra-1,iot-cassandra-2,iot-cassandra-3
       - CASSANDRA_LOCAL_DC=datacenter1
     volumes:
       - .:/app
@@ -36,7 +98,9 @@ services:
       - iot-network
 
 volumes:
-  cassandra-data:
+  cassandra-node-1:
+  cassandra-node-2:
+  cassandra-node-3:
 
 networks:
   iot-network:
