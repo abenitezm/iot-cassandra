@@ -21,6 +21,7 @@ body {
   margin-bottom: 30px;
   background: linear-gradient(90deg, #ff7e5f, #feb47b);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -108,9 +109,78 @@ body {
   color: #ffb86c;
 }
 
-/* Opcional: para tooltip de Recharts */
 .recharts-tooltip-wrapper {
   background: #282a36 !important;
   border: 1px solid #6272a4 !important;
   color: #f8f8f2 !important;
+}
+
+.main-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.sidebar {
+  flex: 1;
+}
+
+.content {
+  flex: 2;
+}
+
+.error {
+  color: #ff6b6b;
+  margin-top: 10px;
+}
+
+.sensor-chart form select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #3b3d4a;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  appearance: none; /* Quita estilo nativo de flecha */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+}
+
+/* Agregar una flecha personalizada */
+.sensor-chart form select::after {
+  content: '▼';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #e0e0e0;
+}
+
+/* Opciones desplegables */
+.sensor-chart form select option {
+  background-color: #3b3d4a;
+  color: #e0e0e0;
+}
+
+.sensor-list .actions button {
+  margin-left: 8px; 
+}
+
+.sensor-form input {
+  width: 90%;     
+  padding: 6px 8px; 
+  font-size: 0.9rem; 
+}
+
+.sensor-form select {
+  width: 30%;     
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+.sensor-form button {
+  padding: 6px 12px;
+  font-size: 0.9rem;
 }

@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-// Instancia de Axios apuntando al backend Go
 export const api = axios.create({
-  baseURL: '/api'
+  baseURL: 'http://localhost:8080',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  timeout: 10000
 })
