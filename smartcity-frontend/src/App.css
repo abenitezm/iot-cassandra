@@ -1,0 +1,116 @@
+/* Estilo global */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  color: #e0e0e0;
+}
+
+/* Contenedor principal */
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Título principal */
+.app h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Tarjetas */
+.sensor-form, .sensor-list, .sensor-chart {
+  background: linear-gradient(145deg, #1e1f26, #2a2c38);
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s;
+}
+
+.sensor-form:hover,
+.sensor-list:hover,
+.sensor-chart:hover {
+  transform: translateY(-3px);
+}
+
+/* Inputs */
+.sensor-form input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3b3d4a;
+  color: #e0e0e0;
+}
+
+.sensor-form input::placeholder {
+  color: #aaa;
+}
+
+/* Botones */
+.sensor-form button, .sensor-list button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.sensor-form button:hover, .sensor-list button:hover {
+  background: linear-gradient(90deg, #ff4b2b, #ff416c);
+  transform: translateY(-2px);
+}
+
+/* Lista de sensores */
+.sensor-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sensor-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #44475a;
+}
+
+.sensor-list li span {
+  cursor: pointer;
+  color: #f8f8f2;
+  transition: color 0.2s;
+}
+
+.sensor-list li span:hover {
+  color: #ff6b6b;
+}
+
+/* Gráficos */
+.sensor-chart {
+  padding: 30px 20px;
+}
+
+.sensor-chart h2 {
+  margin-bottom: 20px;
+  color: #ffb86c;
+}
+
+/* Opcional: para tooltip de Recharts */
+.recharts-tooltip-wrapper {
+  background: #282a36 !important;
+  border: 1px solid #6272a4 !important;
+  color: #f8f8f2 !important;
+}
