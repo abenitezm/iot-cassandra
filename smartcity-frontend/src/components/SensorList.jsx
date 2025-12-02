@@ -1,30 +1,32 @@
+import React from 'react'
+
 export default function SensorList({ sensors = [], onSelect, onDelete, loading }) {
   return (
     <div className="sensor-list">
       <h2>Sensores</h2>
       {loading && <div className="muted">Cargando...</div>}
       <ul>
-        {sensors.map((s, index) => (
-          <li key={s.sensor_id || index}>
-            <div className="sensor-info" onClick={() => onSelect?.(s.sensor_id)}>
+        {sensors.map((s, i) => (
+          <li key={s.sensor_id || i} onClick={() => onSelect?.(s.sensor_id)}>
+            <div className="sensor-info">
               <div className="id">{s.sensor_id}</div>
               <div className="type">{s.type}</div>
             </div>
             <div className="actions">
-              <button 
+              <button
                 className="small"
-                onClick={(e) => { 
-                  e.stopPropagation(); 
-                  onSelect?.(s.sensor_id); 
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onSelect?.(s.sensor_id)
                 }}
               >
                 Ver
               </button>
               <button
                 className="small danger"
-                onClick={(e) => { 
-                  e.stopPropagation(); 
-                  if (confirm(`¿Eliminar ${s.sensor_id}?`)) onDelete?.(s.sensor_id);
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (confirm(`¿Eliminar ${s.sensor_id}?`)) onDelete?.(s.sensor_id)
                 }}
               >
                 Eliminar
@@ -34,5 +36,5 @@ export default function SensorList({ sensors = [], onSelect, onDelete, loading }
         ))}
       </ul>
     </div>
-  );
+  )
 }
