@@ -6,8 +6,8 @@ import (
 
 	"iot-api/config"
 
-	"github.com/gocql/gocql"
 	"github.com/gin-gonic/gin"
+	"github.com/gocql/gocql"
 )
 
 type Sensor struct {
@@ -72,4 +72,30 @@ func GetSensor(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, s)
+}
+
+func DeleteSensor(c *gin.Context) {
+	sensorID := c.Param("sensor_id")
+	if sensorID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "sensor_id es requerido"})
+		return
+	}
+
+	session := config.Session
+	if session == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Cassandra no está inicializada"})
+		return
+	}
+
+	if err := session.Query(`DELETE FROM sensor_readings WHERE sensor_id = ?`, sensorID).Exec(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error borrando las lecturas del sensor"})
+		return
+	}
+
+	if err := session.Query(`DELETE FROM sensors WHERE sensor_id = ?`, sensorID).Exec(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error borrando el sensor"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Sensor eliminado correctamente"})
 }
