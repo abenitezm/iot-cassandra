@@ -97,6 +97,69 @@ services:
     networks:
       - iot-network
 
+  sensor-temp:
+    image: python:3.14-alpine
+    container_name: sensor_temp
+    environment:
+      - SENSOR_ID=temp_001
+      - SENSOR_TYPE=temperature
+      - API_URL=http://iot-app:8080
+      - MIN_VALUE=15
+      - MAX_VALUE=35
+      - UNIT=C
+      - INTERVAL=10
+    volumes:
+      - ./simulated_sensors/sensor.py:/app/sensor.py
+    depends_on:
+      iot-app:
+        condition: service_started
+    networks:
+      - iot-network
+    restart: unless-stopped
+    command: python -u /app/sensor.py
+
+  sensor-humidity:
+    image: python:3.14-alpine
+    container_name: sensor_humidity
+    environment:
+      - SENSOR_ID=humidity_001
+      - SENSOR_TYPE=humidity
+      - API_URL=http://iot-app:8080
+      - MIN_VALUE=30
+      - MAX_VALUE=90
+      - UNIT=%
+      - INTERVAL=15
+    volumes:
+      - ./simulated_sensors/sensor.py:/app/sensor.py
+    depends_on:
+      iot-app:
+        condition: service_started
+    networks:
+      - iot-network
+    restart: unless-stopped
+    command: python -u /app/sensor.py
+
+  sensor-air:
+    image: python:3.14-alpine
+    container_name: sensor_air
+    environment:
+      - SENSOR_ID=air_001
+      - SENSOR_TYPE=air_quality
+      - API_URL=http://iot-app:8080
+      - MIN_VALUE=0
+      - MAX_VALUE=500
+      - UNIT=AQI
+      - INTERVAL=20
+    volumes:
+      - ./simulated_sensors/sensor.py:/app/sensor.py
+    depends_on:
+      iot-app:
+        condition: service_started
+    networks:
+      - iot-network
+    restart: unless-stopped
+    command: python -u /app/sensor.py
+
 volumes:
   cassandra-node-1:
   cassandra-node-2:
