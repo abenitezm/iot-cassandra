@@ -1,6 +1,6 @@
 # Plataforma de sensores IoT "Smartcity"
 
-Una implementación minimalista de una plataforma IoT para gestión de sensores, basada en [cassandra-iot-sample](https://gitlab.com/webdevcaptain/cassandra-iot-sample/-/tree/main}).
+Una implementación minimalista de una plataforma IoT para gestión de sensores, basada en [cassandra-iot-sample](https://gitlab.com/webdevcaptain/cassandra-iot-sample/-/tree/main).
 
 ## Tecnologías utilizadas
 * Go + Gin (API)
