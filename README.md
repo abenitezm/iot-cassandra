@@ -7,6 +7,7 @@ Una implementación minimalista de una plataforma IoT para gestión de sensores,
 * Cassandra (Base de datos distribuida)
 * Python (Simuladores)
 * Docker Compose (Orquestación)
+* React + Vite (Frontend)
 
 
 ## Ejecución
@@ -17,6 +18,12 @@ docker compose up
 
 # Verifica su estado
 curl http://localhost:8080/
+
+# Importa módulos necesarios 
+npm install
+
+# Inicia la página
+npm run dev
 ```
 
 ## Servicios
